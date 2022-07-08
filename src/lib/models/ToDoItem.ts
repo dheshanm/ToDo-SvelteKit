@@ -5,8 +5,8 @@
 
  export interface ToDoItem {
     _id: String;
-    title: string;
+    title: String;
     completed: boolean;
     createdAt: Number;
-    deadline: Number;
+    deadline: Number | null;
 }

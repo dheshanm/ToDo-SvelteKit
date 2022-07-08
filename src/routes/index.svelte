@@ -2,6 +2,7 @@
     import { DateInput } from 'date-picker-svelte'
     import { getAllItems } from '$lib/dao/ToDoItemsDao'
     import ToDoItemCard from '$lib/components/ToDoItemCard.svelte';
+    import ToDoItemForm from '$lib/components/ToDoItemForm.svelte';
     import type { ToDoItem } from '$lib/models/ToDoItem';
 
     const attribs = ['createdAt', 'deadline'];
@@ -17,13 +18,18 @@
 
     let toDoItems: ToDoItem[] = [];
 
-    getAllItems().then(items => {
+    function refreshData() {
+        console.log("Refreshing data...");
+        getAllItems().then(items => {
         toDoItems = items;
     })
+    }
+    
+    refreshData();
 </script>
 
 <div>
-    <form class="w-full flex flex-col flex-wrap md:flex-row">
+    <div class="w-full flex flex-col flex-wrap md:flex-row">
         <div class="m-2 p-2 flex-1 max-w-sm">
             <div class="md:w-1/3">
                 <label class="block text-black text-lg font-bold md:text-center mb-1 md:mb-0 pr-4" for="inline-type">
@@ -146,12 +152,25 @@
 
         <div class="m-2 p-2 flex-1 max-w-4xl">
             <div class="md:flex md:items-center mb-6 flex-col">
-                <div class="pl-2 flex flex-col md:flex-row">
+                <div class="pl-2 flex flex-col md:flex-row flex-wrap">
+                    <ToDoItemForm callback={refreshData}/>
                 {#each toDoItems as item, index}
                     <ToDoItemCard bind:data={item} />
+                    {#if index % 3 == 0}
+                    <div class="break"> </div>
+                    {/if}
                 {/each}
                 </div>
             </div>
         </div>
-      </form>
+
+    </div>
+    
 </div>
+
+<style>
+.break {
+  flex-basis: 100%;
+  height: 0;
+}
+</style>
