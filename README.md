@@ -1,18 +1,17 @@
-# create-svelte
+# Intel 2022 - GPU Software Development Intern 
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+## A Simple To-Do App Frontend
 
-## Creating a project
+This repository contains a simple frontend built using SvelteKit, for a
+basic ToDo Application. 
 
-If you're seeing this, you've probably already done this step. Congrats!
+The Source for the backend can be found at [github.com/L4TTiCe/ToDo-Node](https://github.com/L4TTiCe/ToDo-Node).
 
-```bash
-# create a new project in the current directory
-npm init svelte
+For more information about the TASK, refer to [TASK.md](TASK.md).
 
-# create a new project in my-app
-npm init svelte my-app
-```
+## Requirements
+This repository requires
+- [Node.JS](https://nodejs.org/en/) LTS - 16
 
 ## Developing
 
