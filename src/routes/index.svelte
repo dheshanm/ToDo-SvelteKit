@@ -1,14 +1,18 @@
 <script lang="ts">
     import { DateInput } from 'date-picker-svelte'
-    import { getAllItems } from '$lib/dao/ToDoItemsDao'
+    import { getAllItems, getAllItemsSingleParam, getAllItemsTwoParam, getAllItemsSorted, deleteItemById } from '$lib/dao/ToDoItemsDao'
     import ToDoItemCard from '$lib/components/ToDoItemCard.svelte';
-    import ToDoItemForm from '$lib/components/ToDoItemForm.svelte';
+    import ToDoItemFormCompact from '$lib/components/ToDoItemFormCompact.svelte';
+    import ToDoItemFormWide from '$lib/components/ToDoItemFormWide.svelte';
     import type { ToDoItem } from '$lib/models/ToDoItem';
 
+    // Available Attributes to sort / filter by:
     const attribs = ['createdAt', 'deadline'];
+
     let attrib: String = '';
     let params: String = '';
 
+    // Set Default sorting order
     let sort: String = 'asc';
 
     let date = new Date();
@@ -16,13 +20,48 @@
     let start = new Date();
     let end = new Date();
 
+    let compactView = true;
+
     let toDoItems: ToDoItem[] = [];
 
-    function refreshData() {
+    // Reset Filters to default values
+    function resetFilter() {
+        attrib = '';
+        params = '';
+        sort = 'asc';
+        compactView = true;
+    }
+
+    // Detes an Item, given its ID and redreshed the data
+    async function deleteItem(id: String) {
+        await deleteItemById(id);
+        refreshData();
+    }
+
+    // Refreshes the data from the DB, while apply any active filters
+    async function refreshData(): Promise<void> {
         console.log("Refreshing data...");
-        getAllItems().then(items => {
-        toDoItems = items;
-    })
+
+        if (attrib) {
+            if (params) {
+                switch (params) {
+                    case 'b':
+                        toDoItems = await getAllItemsSingleParam(attrib, 'before', date.getTime(), sort);
+                        break;
+                    case 'a':
+                        toDoItems = await getAllItemsSingleParam(attrib, 'after', date.getTime(), sort);
+                        break;
+                    case 'bw':
+                        toDoItems = await getAllItemsTwoParam(attrib, start.getTime(), end.getTime(), sort);
+                        break;
+                }
+            } else {
+                toDoItems = await getAllItemsSorted(attrib, sort);
+            }
+            
+        } else {
+            toDoItems = await getAllItems();
+        }
     }
     
     refreshData();
@@ -84,7 +123,7 @@
             </div>
             {/if}
 
-            {#if params == "b" || params == "a"}
+            {#if attrib && (params == "b" || params == "a")}
             <div class="md:flex md:items-center mb-6">
                 <div class="md:w-1/3">
                     <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-date">
@@ -97,7 +136,7 @@
             </div>
             {/if}
 
-            {#if params == "bw"}
+            {#if attrib && params == "bw"}
             <div class="md:flex md:items-center mb-2">
                 <div class="md:w-1/3">
                     <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-start-date">
@@ -140,20 +179,42 @@
             </div>
             {/if}
 
+            <div class="md:flex md:items-center mb-6">
+                <div class="md:w-1/3">
+                  <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-view">
+                    View
+                  </label>
+                </div>
+                <div class="md:w-2/3">
+                    <div class="flex items-center mb-1">
+                        <input id="view" type="radio" bind:group={compactView} value={false} name="view" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="view" class="ml-2 text-sm font-medium text-gray-900 ">Relaxed</label>
+                    </div>
+                    <div class="flex items-center mb-1">
+                        <input id="view" type="radio" bind:group={compactView} value={true} name="sview" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="viewy" class="ml-2 text-sm font-medium text-gray-900 ">Compact</label>
+                    </div>
+                </div>
+            </div>
+
             <div class="md:flex md:items-center">
                 <div class="md:w-1/3"></div>
                 <div class="md:w-2/3">
-                  <button class="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">
+                  <button on:click={refreshData} class="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">
                     Filter
+                  </button>
+                  <button on:click={resetFilter} class="shadow bg-red-500 hover:bg-red-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">
+                    Reset
                   </button>
                 </div>
             </div>
         </div>
 
+        {#if !compactView}
         <div class="m-2 p-2 flex-1 max-w-4xl">
             <div class="md:flex md:items-center mb-6 flex-col">
                 <div class="pl-2 flex flex-col md:flex-row flex-wrap">
-                    <ToDoItemForm callback={refreshData}/>
+                    <ToDoItemFormCompact callback={refreshData}/>
                 {#each toDoItems as item, index}
                     <ToDoItemCard bind:data={item} />
                     {#if index % 3 == 0}
@@ -163,7 +224,70 @@
                 </div>
             </div>
         </div>
+        {/if}
 
+        {#if compactView}
+        <div class="w-2/3">
+            <ToDoItemFormWide callback={refreshData}/>
+            <!-- <div class="m-2 p-2 flex-1 max-w-sm"> -->
+                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="p-4">
+                                    <div class="flex items-center">
+                                        <input id="checkbox-all" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="checkbox-all" class="sr-only">checkbox</label>
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Title
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Created At
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Deadline
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    <span class="sr-only">Edit</span>
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    <span class="sr-only">Delete</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {#each toDoItems as item, index}
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <td class="w-4 p-4">
+                                    <div class="flex items-center">
+                                        <input bind:checked={item.completed} type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    </div>
+                                </td>
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                    {item.title}
+                                </th>
+                                <td class="px-6 py-4">
+                                    {new Date(item.createdAt).toLocaleString()}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {item.deadline ? new Date(item.deadline).toLocaleString() : ''}
+                                </td>
+                                
+                                <td class="px-6 py-4 text-right">
+                                    <a href="/{item._id}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <span on:click={() => deleteItem(item._id)} class="font-medium text-red-600 dark:text-red-500 hover:underline">Delete</span>
+                                </td>
+                            </tr>
+                            {/each}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {/if}     
     </div>
     
 </div>

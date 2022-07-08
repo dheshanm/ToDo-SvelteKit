@@ -19,6 +19,39 @@ export async function getAllItems(): Promise<ToDoItem[]> {
     return items;
 }
 
+export async function getAllItemsSorted(attrib: String, sort: String): Promise<ToDoItem[]> {
+    let items: ToDoItem[] = [];
+    try {
+        const response = await axios.get(`${variables.SERVER_URL}/todo?attrib=${attrib}&sort=${sort}`);
+        items = response.data;
+    } catch (err) {
+        console.error(err);
+    }
+    return items;
+}
+
+export async function getAllItemsSingleParam(attrib: String, param: String, threshold: Number, sort: String): Promise<ToDoItem[]> {
+    let items: ToDoItem[] = [];
+    try {
+        const response = await axios.get(`${variables.SERVER_URL}/todo?attrib=${attrib}&${param}=${threshold}&sort=${sort}`);
+        items = response.data;
+    } catch (err) {
+        console.error(err);
+    }
+    return items;
+}
+
+export async function getAllItemsTwoParam(attrib: String, start: Number, end: Number, sort: String): Promise<ToDoItem[]> {
+    let items: ToDoItem[] = [];
+    try {
+        const response = await axios.get(`${variables.SERVER_URL}/todo?attrib=${attrib}&start=${start}&end=${end}&sort=${sort}`);
+        items = response.data;
+    } catch (err) {
+        console.error(err);
+    }
+    return items;
+}
+
 export async function getItemById(id: String): Promise<ToDoItem | null> {
     let item: ToDoItem;
     try {
