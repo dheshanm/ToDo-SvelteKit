@@ -1,10 +1,13 @@
 <script lang="ts">
     import { DateInput } from 'date-picker-svelte'
+    import { variables } from '$lib/env';
     import { getAllItems, getAllItemsSingleParam, getAllItemsTwoParam, getAllItemsSorted, deleteItemById } from '$lib/dao/ToDoItemsDao'
     import ToDoItemCard from '$lib/components/ToDoItemCard.svelte';
     import ToDoItemFormCompact from '$lib/components/ToDoItemFormCompact.svelte';
     import ToDoItemFormWide from '$lib/components/ToDoItemFormWide.svelte';
     import type { ToDoItem } from '$lib/models/ToDoItem';
+
+    console.log('Using Server: ' + variables.SERVER_URL);
 
     // Available Attributes to sort / filter by:
     const attribs = ['createdAt', 'deadline'];
