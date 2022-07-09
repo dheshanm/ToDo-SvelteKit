@@ -1,16 +1,18 @@
-# Intel 2022 - GPU Software Development Intern 
+# Intel 2022 - GPU Software Development Intern
 
 ## A Simple To-Do App Frontend
 
 This repository contains a simple frontend built using SvelteKit, for a
-basic ToDo Application. 
+basic ToDo Application.
 
 The Source for the backend can be found at [github.com/L4TTiCe/ToDo-Node](https://github.com/L4TTiCe/ToDo-Node).
 
 For more information about the TASK, refer to [TASK.md](TASK.md).
 
 ## Requirements
+
 This repository requires
+
 - [Node.JS](https://nodejs.org/en/) LTS - 16
 
 ## Developing

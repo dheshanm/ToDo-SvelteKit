@@ -49,23 +49,22 @@
 				<div>
 					<a href="/" class="flex items-center py-4 px-2">
 						<img src="../../to-do-list.png" alt="Logo" class="h-8 w-8 mr-2" />
-						<span
-							class="font-semibold text-gray-500 text-lg">To-Do List
-						</span>
+						<span class="font-semibold text-gray-500 text-lg">To-Do List </span>
 					</a>
 				</div>
 			</div>
 			<div class="hidden md:flex items-center space-x-1">
 				<a href="/" class={active == '/' ? active_classes : inactive_classes}>List</a>
 				<a href="/about" class={active == 'about' ? active_classes : inactive_classes}>About</a>
-            
+
 				<span
-					class="px-4 py-2 rounded-full text-gray-500 bg-gray-200 font-semibold text-sm flex align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease">
+					class="px-4 py-2 rounded-full text-gray-500 bg-gray-200 font-semibold text-sm flex align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease"
+				>
 					Server
 					{#if isServerUp}
-					<img src="../../green-circle.png" alt="Logo" class="h-4 w-4 m-1" />
+						<img src="../../green-circle.png" alt="Logo" class="h-4 w-4 m-1" />
 					{:else}
-					<img src="../../red-circle.png" alt="Logo" class="h-4 w-4 m-1" />
+						<img src="../../red-circle.png" alt="Logo" class="h-4 w-4 m-1" />
 					{/if}
 				</span>
 			</div>
@@ -91,14 +90,15 @@
 			<a href="/" class={active == '/' ? classes_small_active : classes_small}>List </a>
 			<a href="/about" class={active == 'about' ? classes_small_active : classes_small}>About</a>
 			<span
-					class="px-4 py-2 rounded-full text-gray-500 bg-gray-200 font-semibold text-sm flex align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease">
-					Server
-					{#if isServerUp}
+				class="px-4 py-2 rounded-full text-gray-500 bg-gray-200 font-semibold text-sm flex align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease"
+			>
+				Server
+				{#if isServerUp}
 					<img src="../../green-circle.png" alt="Logo" class="h-4 w-4 m-1" />
-					{:else}
+				{:else}
 					<img src="../../red-circle.png" alt="Logo" class="h-4 w-4 m-1" />
-					{/if}
-				</span>
+				{/if}
+			</span>
 		</div>
 	</div>
 </nav>

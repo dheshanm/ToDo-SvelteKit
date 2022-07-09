@@ -1,6 +1,6 @@
 <script lang="ts">
-    import "../app.css";
-    import Footer from '$lib/components/footer.svelte';
+	import '../app.css';
+	import Footer from '$lib/components/footer.svelte';
 	import Nav from '$lib/components/nav.svelte';
 
 	const app_name = 'To-Do List Management';

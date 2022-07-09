@@ -26,10 +26,8 @@
 				>
 			</li>
 			<li class="underline hover:no-underline hover:text-blue-800">
-				<a
-					href="https://github.com/L4TTiCe/ToDo-Node"
-					target="_blank"
-					rel="noopener noreferrer">Backend - built on Express</a
+				<a href="https://github.com/L4TTiCe/ToDo-Node" target="_blank" rel="noopener noreferrer"
+					>Backend - built on Express</a
 				>
 			</li>
 		</ul>
