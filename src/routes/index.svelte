@@ -6,7 +6,8 @@
 		getAllItemsSingleParam,
 		getAllItemsTwoParam,
 		getAllItemsSorted,
-		deleteItemById
+		deleteItemById,
+		toggleItemById
 	} from '$lib/dao/ToDoItemsDao';
 	import ToDoItemCard from '$lib/components/ToDoItemCard.svelte';
 	import ToDoItemFormCompact from '$lib/components/ToDoItemFormCompact.svelte';
@@ -381,6 +382,7 @@
 										<div class="flex items-center">
 											<input
 												bind:checked={item.completed}
+												on:change={ () => toggleItemById(item._id, item.completed)}
 												type="checkbox"
 												class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
 											/>
