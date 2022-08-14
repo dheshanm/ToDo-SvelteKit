@@ -8,7 +8,7 @@ import axios from 'axios';
 export async function getAllItems(): Promise<ToDoItem[]> {
 	let items: ToDoItem[] = [];
 	try {
-		const response = await axios.get(`${variables.SERVER_URL}/todo/`);
+		const response = await axios.get(`${variables.SERVER_URL}/todo`);
 		items = response.data;
 		// console.log(`getAllItems: ${JSON.stringify(items)}`);
 	} catch (err) {
@@ -80,7 +80,7 @@ export async function getItemById(id: string): Promise<ToDoItem | null> {
 
 export async function createItem(item: any): Promise<void> {
 	try {
-		await axios.post(`${variables.SERVER_URL}/todo/`, item);
+		await axios.post(`${variables.SERVER_URL}/todo`, item);
 	} catch (err) {
 		// Handle Error Here
 		console.error(err);
